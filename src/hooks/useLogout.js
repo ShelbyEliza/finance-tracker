@@ -2,33 +2,28 @@ import { useState, useEffect } from "react";
 import { projectAuth } from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
-export const useSignup = () => {
+export const useLogout = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email, password, displayName) => {
+  // you don't necessarily want to logout the user when this hook is called
+  // so here is a function to call:
+
+  const logout = async () => {
     setError(null);
     setIsPending(true);
 
+    // sign user out:
     try {
-      // signup user
-      const res = await projectAuth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
+      await projectAuth.signOut();
 
-      if (!res) {
-        throw new Error("Could not complete signup.");
-      }
+      // dispatch logout action:
+      // don't need second argument because user becomes null
+      dispatch({ type: "LOGOUT" });
 
-      // add display name to user
-      await res.user.updateProfile({ displayName: displayName }); // accepted ({ displayName })
-
-      // dispatch login action (locally, firebase does so automatically):
-      dispatch({ type: "LOGIN", payload: res.user });
-
+      // update state:
       if (!isCancelled) {
         setIsPending(false);
         setError(null);
@@ -42,9 +37,11 @@ export const useSignup = () => {
     }
   };
 
+  // clean up function, in case a user navigates away from the page before hook is finished
+  // fires once initially - returns cleanup function - doesn't run it unless unmounted
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { error, isPending, signup };
+  return { logout, error, isPending };
 };
