@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+:root {
+  --secondary: #1c7c7c;
+}
+
 /* base styles */
 body {
   font-family: Poppins, sans-serif;
@@ -21,15 +25,15 @@ ul {
 }
 .btn {
   background: none;
-  border: 2px solid #1c697c;
+  border: 2px solid var(--secondary);
   padding: 6px 12px;
   border-radius: 4px;
-  color: #1c697c;
+  color: var(--secondary);
   font-weight: bold;
   cursor: pointer;
   font-size: 1em;
 }
 .btn:hover {
-  background: #1c697c;
+  background: var(--secondary);
   color: #fff;
 }
