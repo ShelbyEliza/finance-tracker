@@ -34,6 +34,13 @@ const firestoreReducer = (state, action) => {
         success: false,
         error: action.payload,
       };
+    case "EDITED_DOCUMENT":
+      return {
+        isPending: false,
+        document: action.payload,
+        success: true,
+        error: null,
+      };
     default:
       return state;
   }
@@ -70,6 +77,24 @@ export const useFirestore = (collection) => {
     }
   };
 
+  const editDocument = async (month, data) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      const formattedMonth = month.toLowerCase();
+      const editedAt = timestamp.fromDate(new Date());
+      const editedDocument = await ref
+        .doc(formattedMonth)
+        .set({ ...data, editedAt });
+      dispatchIfNotCancelled({
+        type: "EDITED_DOCUMENT",
+        payload: editedDocument,
+      });
+    } catch (err) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
+    }
+  };
+
   // delete a document:
   const deleteDocument = async (id) => {
     dispatch({ type: "IS_PENDING" });
@@ -86,5 +111,5 @@ export const useFirestore = (collection) => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, deleteDocument, response };
+  return { addDocument, deleteDocument, editDocument, response };
 };

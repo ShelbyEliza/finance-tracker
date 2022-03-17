@@ -13,7 +13,7 @@ const Navbar = () => {
       <ul>
         <li className={styles.title}>
           <NavLink exact to="/">
-            Track Your Money
+            Track Your Money!
           </NavLink>
         </li>
 
@@ -30,6 +30,9 @@ const Navbar = () => {
 
         {user && (
           <>
+            <li>
+              <NavLink to="/manage-budget">Manage Budget</NavLink>
+            </li>
             <li>Hello, {user.displayName}</li>
             <li>
               <button onClick={logout} className="btn">

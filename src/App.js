@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
+import ManageBudget from "./pages/budget/ManageBudget";
+import MonthDetails from "./pages/budget/MonthDetails";
 
 function App() {
   const { authIsReady, user } = useAuthContext();
@@ -25,6 +27,14 @@ function App() {
             <Route path="/signup">
               {user && <Redirect to="/" />}
               {!user && <Signup />}
+            </Route>
+            <Route path="/manage-budget">
+              {user && <ManageBudget />}
+              {!user && <Redirect to="/login" />}
+            </Route>
+            <Route path="/month-details/:month">
+              {user && <MonthDetails />}
+              {!user && <Redirect to="/login" />}
             </Route>
             <Route path="*">
               <Redirect to="/" />

@@ -13,6 +13,7 @@ export const useCollection = (collection, _query, _orderBy) => {
   // using a useEffect because this should run as soon as this hook is called
   useEffect(() => {
     let ref = projectFirestore.collection(collection);
+    // console.log(ref.doc());
 
     if (query) {
       // ref = ref.where( "uid", "==", user.uid)
