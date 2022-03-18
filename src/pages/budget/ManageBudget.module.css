@@ -2,16 +2,101 @@
   display: grid;
   max-width: 800px;
 
-  margin: 60px auto;
-  grid-template-columns: 2fr 1fr;
-}
-.content {
-  padding-right: 30px;
+  margin: 40px auto;
+  grid-template-columns: 1fr 3fr;
 }
 .sidebar {
-  padding-left: 30px;
+  text-align: center;
 }
-.sidebar form {
+.sidebar ul {
+  border-right: 4px solid #114949;
+}
+.sidebar h3 {
+  padding: 6px;
+
+  background: var(--secondary);
+  border: 4px solid #114949;
+  border-bottom: none;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: floralwhite;
+  margin-left: 90px;
+}
+.sidebar li {
+  border: 2px solid #f2f2f2;
+  border-right: none;
+  box-shadow: 3px 3px 5px rgba(50, 50, 50, 0.1);
+  padding: 8px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-left: 20px;
+}
+.sidebar li:hover {
+  background: var(--secondary);
+  border: 2px solid #114949;
+  border-right: none;
+  color: floralwhite;
+  cursor: pointer;
+  margin-left: 2px;
+}
+.content .title {
+  text-align: center;
+}
+
+/*BudgetDetails: */
+.budget-box {
+  margin-left: 40px;
+  position: relative;
+  padding-bottom: 50px;
+}
+.budget-box button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.budget {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+.budget h3 {
+  margin: auto;
+  background: var(--secondary);
+  border: 2px solid #114949;
+  color: floralwhite;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
+  text-align: center;
+  width: 400px;
+  font-weight: 400;
+}
+.budget label {
+  font-size: 1.2em;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+.res {
+  margin-left: 10px;
+  padding-bottom: 8px;
+}
+.expenses {
+  color: rgb(136, 7, 7);
+}
+.income {
+  color: #32692b;
+}
+.budget input {
+  margin-left: 10px;
+  margin-bottom: 8px;
+  padding: 6px;
+  max-width: 100px;
+  text-align: end;
+  font-size: 1em;
+}
+
+/* .sidebar form {
   padding: 20px;
 
   background: var(--secondary);
@@ -52,48 +137,10 @@
 
   cursor: pointer;
 }
-.sidebar h3 {
-  margin-bottom: 20px;
-  color: var(--secondary);
-}
 .sidebar aside {
   margin-top: 10px;
   color: #555;
 }
 .sidebar aside li {
   margin: 10px;
-}
-
-/* Transactions List */
-/* .budgets button {
-  text-decoration: none;
-  cursor: pointer;
 } */
-.budgets li {
-  margin: 30px auto;
-  border: 1px solid #f2f2f2;
-  box-shadow: 3px 3px 5px rgba(50, 50, 50, 0.1);
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  border-left: 4px solid var(--secondary);
-}
-.budgets .month {
-  padding-right: 20px;
-}
-.budgets .income {
-  color: #777;
-  /* font-size: 1.4em; */
-}
-.budgets .bills {
-  margin-left: auto;
-  margin-right: 40px;
-  color: #777;
-  font-weight: bold;
-  /* font-size: 1.6em; */
-}
-.hidden {
-  visibility: hidden;
-}

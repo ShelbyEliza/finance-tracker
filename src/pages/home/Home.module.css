@@ -63,6 +63,20 @@
 .sidebar aside li {
   margin: 10px;
 }
+.sidebar .type-label {
+  margin-bottom: 0px;
+}
+.type {
+  display: flex;
+  align-items: center;
+}
+.type input,
+.type label {
+  margin: 6px 4px;
+}
+.add-btn {
+  margin-top: 10px;
+}
 
 /* Transactions List */
 .transactions li {

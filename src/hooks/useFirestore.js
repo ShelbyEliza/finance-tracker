@@ -81,11 +81,12 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      const formattedMonth = month.toLowerCase();
-      const editedAt = timestamp.fromDate(new Date());
+      const lastEditedAt = timestamp.fromDate(new Date());
+
       const editedDocument = await ref
-        .doc(formattedMonth)
-        .set({ ...data, editedAt });
+        .doc(month)
+        .set({ ...data, lastEditedAt });
+
       dispatchIfNotCancelled({
         type: "EDITED_DOCUMENT",
         payload: editedDocument,

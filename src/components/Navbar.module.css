@@ -1,26 +1,41 @@
 .navbar {
-  width: 100%;
-  background: #f0b942;
-  padding: 20px 10px;
   box-sizing: border-box;
+  background: #f0b942;
+
+  display: flex;
+  justify-content: center;
+
+  margin: auto;
 }
 .navbar ul {
+  width: 100%;
+  max-width: 900px;
+
   display: flex;
-  margin: 0 auto;
-  max-width: 800px;
+  justify-content: space-around;
   align-items: center;
 }
+.navbar li {
+  padding: 10px 20px;
+}
 .title {
-  margin-right: auto;
   font-weight: bold;
   letter-spacing: 1px;
-  font-size: 1.2em;
+  font-size: 1.6em;
 }
-.navbar button,
-.navbar a {
-  margin-left: 30px;
-}
+
 .navbar a {
   color: #333;
   text-decoration: none;
+}
+.tab-label {
+  display: flex;
+  justify-content: center;
+}
+.budget-tab:hover {
+  background: #114949;
+  color: floralwhite;
+}
+.budget-tab:hover .tab-label {
+  color: floralwhite;
 }

@@ -13,7 +13,7 @@ const Navbar = () => {
       <ul>
         <li className={styles.title}>
           <NavLink exact to="/">
-            Track Your Money!
+            Track Your Money
           </NavLink>
         </li>
 
@@ -30,8 +30,11 @@ const Navbar = () => {
 
         {user && (
           <>
-            <li>
-              <NavLink to="/manage-budget">Manage Budget</NavLink>
+            <li className={styles["budget-tab"]}>
+              <NavLink to="/manage-budget">
+                <p className={styles["tab-label"]}>Manage</p>
+                <p className={styles["tab-label"]}>Budget</p>
+              </NavLink>
             </li>
             <li>Hello, {user.displayName}</li>
             <li>

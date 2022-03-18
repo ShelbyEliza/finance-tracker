@@ -10,13 +10,13 @@ service cloud.firestore {
       allow create: if request.auth != null;
 
       // a user can read and delete a resource if their uid's match:
-      allow read, delete: if request.auth.uid == resource.data.uid;
+      allow read, delete, update: if request.auth.uid == resource.data.uid;
     }
 
     match /budget_2022_test/{document=**} {
 
     allow create: if request.auth != null;
-    allow read, delete: if request.auth.uid == resource.data.uid;
+    allow read, delete, update: if request.auth.uid == resource.data.uid;
     }
   }
 }

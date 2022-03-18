@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
+import styles from "./Home.module.css";
 
 export default function TransactionForm({ uid }) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
+  const [type, setType] = useState("");
   // transaction = collection. generated if not already
   const { addDocument, response } = useFirestore("transactions");
 
@@ -14,6 +16,7 @@ export default function TransactionForm({ uid }) {
       uid,
       name,
       amount,
+      type,
     });
   };
 
@@ -47,7 +50,33 @@ export default function TransactionForm({ uid }) {
             value={amount}
           />
         </label>
-        <button>Add Transaction</button>
+        <label className={styles["type-label"]}>Type:</label>
+        <div className={styles.type}>
+          <>
+            <input
+              type="radio"
+              required
+              name="type"
+              id="type"
+              onChange={(e) => setType(e.target.value)}
+              value="Expense"
+            />
+            <label htmlFor="type">Expense</label>
+          </>
+
+          <>
+            <input
+              type="radio"
+              required
+              name="type"
+              id="type"
+              onChange={(e) => setType(e.target.value)}
+              value="Income"
+            />
+            <label htmlFor="type">Income</label>
+          </>
+        </div>
+        <button className={styles["add-btn"]}>Add Transaction</button>
       </form>
     </>
   );
