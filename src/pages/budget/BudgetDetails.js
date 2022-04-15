@@ -3,7 +3,7 @@ import styles from "./ManageBudget.module.css";
 export default function BudgetDetails({ selectedBudget, openMonth, editMode }) {
   return (
     <div className={styles.budget}>
-      {!selectedBudget && (
+      {!selectedBudget && !editMode && (
         <p>
           Sorry, there is not yet a budget for {openMonth}. Would you like to
           make one?

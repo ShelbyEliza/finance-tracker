@@ -36,9 +36,12 @@ export default function ManageBudget() {
     setEditMode(set);
   };
 
+  console.log(documents);
   useEffect(() => {
     if (openMonth) {
       setSelectedBudget(documents.find((budget) => budget.month === openMonth));
+      // setSelectedBudget(documents.month.find((month) => month === openMonth));
+      console.log(documents.month);
     }
     setEditMode(false);
   }, [openMonth, documents]);
@@ -65,6 +68,11 @@ export default function ManageBudget() {
               openMonth={openMonth}
               editMode={editMode}
             />
+            {!selectedBudget && !editMode && (
+              <button onClick={() => toggleEditMode(true)} className="btn">
+                Make Budget
+              </button>
+            )}
             {selectedBudget && !editMode && (
               <button onClick={() => toggleEditMode(true)} className="btn">
                 Edit

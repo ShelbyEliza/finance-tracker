@@ -20,6 +20,13 @@ const firestoreReducer = (state, action) => {
         success: true,
         error: null,
       };
+    case "SET_DOCUMENT":
+      return {
+        isPending: false,
+        document: action.payload,
+        success: true,
+        error: null,
+      };
     case "DELETED_DOCUMENT":
       return {
         isPending: false,
@@ -76,15 +83,30 @@ export const useFirestore = (collection) => {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
+  // set new document:
+  const setDocument = async (docName, doc) => {
+    dispatch({ type: "IS_PENDING" });
 
-  const editDocument = async (month, data) => {
+    try {
+      const createdAt = timestamp.fromDate(new Date());
+      const newSetDocument = await ref.doc(docName).set({ ...doc, createdAt });
+      dispatchIfNotCancelled({
+        type: "SET_DOCUMENT",
+        payload: newSetDocument,
+      });
+    } catch (err) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
+    }
+  };
+
+  const editDocument = async (docName, data) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
       const lastEditedAt = timestamp.fromDate(new Date());
 
       const editedDocument = await ref
-        .doc(month)
+        .doc(docName)
         .set({ ...data, lastEditedAt });
 
       dispatchIfNotCancelled({
@@ -112,5 +134,5 @@ export const useFirestore = (collection) => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, deleteDocument, editDocument, response };
+  return { addDocument, setDocument, deleteDocument, editDocument, response };
 };
