@@ -1,8 +1,23 @@
-import styles from "./Home.module.css";
+import "./Home.css";
 import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
+
+const monthList = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 export default function Home() {
   const { user } = useAuthContext();
@@ -16,14 +31,14 @@ export default function Home() {
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <div className="container">
+      <div className="content">
         {error && <p>{error}</p>}
         {documents && <TransactionList transactions={documents} />}
       </div>
 
-      <div className={styles.sidebar}>
-        <TransactionForm uid={user.uid} />
+      <div className="sidebar">
+        <TransactionForm uid={user.uid} monthList={monthList} />
       </div>
     </div>
   );

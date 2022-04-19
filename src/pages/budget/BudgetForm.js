@@ -15,7 +15,6 @@ export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
     expenses: 0,
   });
   const docName = month + "-" + user.uid;
-  console.log(docName);
   // const [transactionList, setTransactionList] = useState(null)
 
   useEffect(() => {
@@ -31,7 +30,6 @@ export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(budget);
     const docData = {
       uid: budget.uid,
       month,
@@ -62,7 +60,6 @@ export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
         <input
           type="number"
           required
-          // onChange={(e) => setIncome(e.target.value)}
           onChange={(e) => setBudget({ ...budget, income: e.target.value })}
           value={budget.income}
         />
@@ -71,7 +68,6 @@ export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
         <input
           type="number"
           required
-          // onChange={(e) => setExpenses(e.target.value)}
           onChange={(e) => setBudget({ ...budget, expenses: e.target.value })}
           value={budget.expenses}
         />

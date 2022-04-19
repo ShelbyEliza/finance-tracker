@@ -92,7 +92,10 @@
 }
 
 .transactions .expense {
-  color: salmon;
+  border-left: 4px solid salmon;
+}
+.transactions .income {
+  border-left: 4px solid var(--secondary);
 }
 
 .transactions .name {

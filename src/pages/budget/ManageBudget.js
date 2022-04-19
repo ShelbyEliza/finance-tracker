@@ -36,15 +36,21 @@ export default function ManageBudget() {
     setEditMode(set);
   };
 
-  console.log(documents);
   useEffect(() => {
     if (openMonth) {
-      setSelectedBudget(documents.find((budget) => budget.month === openMonth));
-      // setSelectedBudget(documents.month.find((month) => month === openMonth));
-      console.log(documents.month);
+      setSelectedBudget(documents.find((doc) => doc.month === openMonth));
+
+      // let docID = documents.find(
+      //   (doc) => doc.id === `${openMonth}-${user.uid}`
+      // );
+      // console.log(docID);
     }
     setEditMode(false);
   }, [openMonth, documents]);
+
+  if (selectedBudget) {
+    console.log(selectedBudget);
+  }
 
   return (
     <div className={styles.container}>

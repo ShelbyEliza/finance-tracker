@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import "./Home.css";
 
@@ -7,27 +7,26 @@ export default function TransactionForm({ uid, monthList }) {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("");
   const [month, setMonth] = useState("");
-  const formRef = useRef(null);
   // transaction = collection. generated if not already
   const { addDocument, response } = useFirestore("transactions");
 
   console.log(name, amount, type, month);
   const handleSubmit = (e) => {
     e.preventDefault();
-    addDocument({
-      uid,
-      name,
-      amount,
-      type,
-      month,
-    });
+    if (month !== "") {
+      addDocument({
+        uid,
+        name,
+        amount,
+        type,
+        month,
+      });
+    }
   };
 
   // reset form after successfully adding transaction
-  console.log(response.success);
   useEffect(() => {
     if (response.success) {
-      formRef.current.reset();
       setName("");
       setAmount("");
       setType("");
@@ -38,7 +37,7 @@ export default function TransactionForm({ uid, monthList }) {
   return (
     <>
       <h3>Add a Transaction</h3>
-      <form onSubmit={handleSubmit} ref={formRef}>
+      <form onSubmit={handleSubmit}>
         <label>
           <span>Transaction Name:</span>
           <input
@@ -64,9 +63,9 @@ export default function TransactionForm({ uid, monthList }) {
             <input
               name="type"
               type="radio"
-              id={type}
-              onChange={(e) => setType(e.target.value)}
-              value="expense"
+              id="type"
+              onClick={(e) => setType(e.target.value)}
+              value={type}
               required
             />
             <label htmlFor="expense">Expense</label>
@@ -76,12 +75,9 @@ export default function TransactionForm({ uid, monthList }) {
             <input
               name="type"
               type="radio"
-              id={type}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setType(e.target.value);
-              }}
-              value="income"
+              id="type"
+              onClick={(e) => setType(e.target.value)}
+              value={type}
               required
             />
             <label htmlFor="income">Income</label>
@@ -93,12 +89,12 @@ export default function TransactionForm({ uid, monthList }) {
             <select
               required
               name="month"
-              onChange={(e) => setMonth(e.target.value)}
+              onClick={(e) => setMonth(e.target.value)}
             >
-              <option value="">Pick a Month</option>
+              <option value={month}>Pick a Month</option>
               {monthList.map((monthItem) => {
                 return (
-                  <option key={monthItem} value={monthItem}>
+                  <option key={monthItem} value={month}>
                     {monthItem}
                   </option>
                 );
