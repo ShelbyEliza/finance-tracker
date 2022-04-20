@@ -3,7 +3,6 @@ import "./Home.css";
 
 export default function TransactionList({ transactions }) {
   const { deleteDocument } = useFirestore("transactions");
-  console.log(transactions);
 
   return (
     <ul className="transactions">

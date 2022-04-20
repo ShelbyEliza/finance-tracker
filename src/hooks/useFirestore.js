@@ -88,8 +88,10 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      const createdAt = timestamp.fromDate(new Date());
-      const newSetDocument = await ref.doc(docName).set({ ...doc, createdAt });
+      const lastEditedAt = timestamp.fromDate(new Date());
+      const newSetDocument = await ref
+        .doc(docName)
+        .set({ ...doc, lastEditedAt }, { merge: true });
       dispatchIfNotCancelled({
         type: "SET_DOCUMENT",
         payload: newSetDocument,
@@ -99,15 +101,36 @@ export const useFirestore = (collection) => {
     }
   };
 
-  const editDocument = async (docName, data) => {
+  const editDocument = async (docName, type, data) => {
     dispatch({ type: "IS_PENDING" });
+    let editedDocument;
+    console.log(docName, type, data);
 
     try {
       const lastEditedAt = timestamp.fromDate(new Date());
 
-      const editedDocument = await ref
-        .doc(docName)
-        .set({ ...data, lastEditedAt });
+      if (type === "income") {
+        editedDocument = await ref.doc(docName).update(
+          {
+            transactionsPlus: projectFirestore.FieldValue.arrayUnion(data),
+            // lastEditedAt: lastEditedAt,
+          },
+          { merge: true }
+        );
+      }
+      if (type === "expense") {
+        console.log("Expense to add.");
+        editedDocument = await ref.doc(docName).update({
+          transactionMinus: projectFirestore.FieldValue.arrayUnion(data),
+          // lastEditedAt: lastEditedAt,
+        });
+      } else {
+        dispatchIfNotCancelled({
+          type: "ERROR",
+          payload: "No type selected. Couldn't add transaction to budget.",
+        });
+      }
+      // .update({ ...data, lastEditedAt });
 
       dispatchIfNotCancelled({
         type: "EDITED_DOCUMENT",

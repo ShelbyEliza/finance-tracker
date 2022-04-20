@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import "./Home.css";
 
@@ -8,32 +10,48 @@ export default function TransactionForm({ uid, monthList }) {
   const [type, setType] = useState("");
   const [month, setMonth] = useState("");
   const formRef = useRef(null);
+  const [docName, setDocName] = useState("");
   // transaction = collection. generated if not already
-  const { addDocument, response } = useFirestore("transactions");
+  const { user } = useAuthContext();
+  // const { addDocument, response } = useFirestore("transactions");
+  const { editDocument, response } = useFirestore("budget_2022_test");
+  const { documents, error } = useCollection(
+    "budget_2022_test",
+    ["uid", "==", user.uid],
+    ["createdAt", "desc"]
+  );
 
-  console.log(name, amount, type, month);
   const handleSubmit = (e) => {
     e.preventDefault();
-    addDocument({
+    const transaction = {
       uid,
       name,
       amount,
       type,
       month,
-    });
+    };
+    // addDocument(transaction);
+    editDocument(docName, type, transaction);
   };
 
+  useEffect(() => {
+    if (month) {
+      setDocName(month + "-" + user.uid);
+    }
+  }, [month, user]);
+
   // reset form after successfully adding transaction
-  console.log(response.success);
   useEffect(() => {
     if (response.success) {
+      console.log("Form Submit Success!");
+      console.log(documents);
       formRef.current.reset();
       setName("");
       setAmount("");
       setType("");
       setMonth("");
     }
-  }, [response.success]);
+  }, [response, documents]);
 
   return (
     <>
@@ -65,7 +83,10 @@ export default function TransactionForm({ uid, monthList }) {
               name="type"
               type="radio"
               id={type}
-              onChange={(e) => setType(e.target.value)}
+              onClick={(e) => {
+                // console.log(type);
+                setType(e.target.value);
+              }}
               value="expense"
               required
             />
@@ -77,8 +98,9 @@ export default function TransactionForm({ uid, monthList }) {
               name="type"
               type="radio"
               id={type}
-              onChange={(e) => {
-                console.log(e.target.value);
+              onClick={(e) => {
+                // console.log(type);
+
                 setType(e.target.value);
               }}
               value="income"

@@ -5,8 +5,7 @@ import styles from "./ManageBudget.module.css";
 
 export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
   const { user } = useAuthContext();
-  const { editDocument, setDocument, response } =
-    useFirestore("budget_2022_test");
+  const { setDocument, response } = useFirestore("budget_2022_test");
 
   const [budget, setBudget] = useState({
     uid: user.uid,
@@ -37,11 +36,7 @@ export default function BudgetForm({ selectedBudget, toggleEditMode, month }) {
       expenses: budget.expenses,
     };
 
-    if (selectedBudget) {
-      editDocument(docName, docData);
-    } else {
-      setDocument(docName, docData);
-    }
+    setDocument(docName, docData);
   };
 
   useEffect(() => {
