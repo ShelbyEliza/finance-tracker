@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useState } from "react";
 import { projectFirestore, timestamp } from "../firebase/config";
+import firebase from "firebase/app";
 
 // defined outside function because they only need to be built once:
 let initialState = {
@@ -110,19 +111,15 @@ export const useFirestore = (collection) => {
       const lastEditedAt = timestamp.fromDate(new Date());
 
       if (type === "income") {
-        editedDocument = await ref.doc(docName).update(
-          {
-            transactionsPlus: projectFirestore.FieldValue.arrayUnion(data),
-            // lastEditedAt: lastEditedAt,
-          },
-          { merge: true }
-        );
+        console.log("Income to add.");
+        editedDocument = await ref.doc(docName).update({
+          plus: firebase.firestore.FieldValue.arrayUnion(data),
+        });
       }
       if (type === "expense") {
         console.log("Expense to add.");
         editedDocument = await ref.doc(docName).update({
-          transactionMinus: projectFirestore.FieldValue.arrayUnion(data),
-          // lastEditedAt: lastEditedAt,
+          minus: firebase.firestore.FieldValue.arrayUnion(data),
         });
       } else {
         dispatchIfNotCancelled({

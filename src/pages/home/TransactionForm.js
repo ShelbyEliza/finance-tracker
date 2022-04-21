@@ -15,11 +15,11 @@ export default function TransactionForm({ uid, monthList }) {
   const { user } = useAuthContext();
   // const { addDocument, response } = useFirestore("transactions");
   const { editDocument, response } = useFirestore("budget_2022_test");
-  const { documents, error } = useCollection(
-    "budget_2022_test",
-    ["uid", "==", user.uid],
-    ["createdAt", "desc"]
-  );
+  const { documents, error } = useCollection("budget_2022_test", [
+    "uid",
+    "==",
+    user.uid,
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +39,13 @@ export default function TransactionForm({ uid, monthList }) {
       setDocName(month + "-" + user.uid);
     }
   }, [month, user]);
+
+  useEffect(() => {
+    if (month) {
+      let docID = documents.find((doc) => doc.id === docName);
+      console.log(docID);
+    }
+  }, [month, docName, documents]);
 
   // reset form after successfully adding transaction
   useEffect(() => {
