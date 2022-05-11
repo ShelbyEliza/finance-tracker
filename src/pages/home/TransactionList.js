@@ -1,24 +1,26 @@
-import { useFirestore } from "../../hooks/useFirestore";
+import { useCollections } from "../../hooks/useCollections";
 import "./Home.css";
 
-export default function TransactionList({ transactions }) {
-  const { deleteDocument } = useFirestore("transactions");
+export default function TransactionList({ user }) {
+  const { documents: document1, error } = useCollections("users", [
+    "uid",
+    "==",
+    user.uid,
+  ]);
+  const { documents: document2 } = useCollections("months", [
+    "uid",
+    "==",
+    user.uid,
+  ]);
 
-  return (
-    <ul className="transactions">
-      {transactions.map((transaction) => (
-        <li key={transaction.id} className={transaction.type}>
-          <p className="name">{transaction.name}</p>
-          {transaction.type === "expense" && (
-            <p className="amount">- ${transaction.amount}</p>
-          )}
-          {transaction.type === "income" && (
-            <p className="amount">+ ${transaction.amount}</p>
-          )}
-          <p>{transaction.month}</p>
-          <button onClick={() => deleteDocument(transaction.id)}>x</button>
-        </li>
-      ))}
-    </ul>
-  );
+  if (document1) {
+    console.log(document1);
+  }
+  if (document2) {
+    console.log(document2);
+  }
+  if (error) {
+    console.log(error);
+  }
+  return <div></div>;
 }

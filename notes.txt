@@ -1,109 +1,63 @@
-import { useState, useEffect } from "react";
-import { useFirestore } from "../../hooks/useFirestore";
-import "./Home.css";
+  const editDocument = async (docName, data) => {
+    dispatch({ type: "IS_PENDING" });
+    console.log(docName, data);
 
-export default function TransactionForm({ uid, monthList }) {
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("");
-  const [month, setMonth] = useState("");
-  // transaction = collection. generated if not already
-  const { addDocument, response } = useFirestore("transactions");
+    try {
+      // const lastEditedAt = timestamp.fromDate(new Date());
+      const editedDocument = await ref
+        .doc(docName)
+        .update({ transactions: data }, { merge: true });
 
-  console.log(name, amount, type, month);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (month !== "") {
-      addDocument({
-        uid,
-        name,
-        amount,
-        type,
-        month,
+      // if (type === "income") {
+      //   console.log("Income to add.");
+      //   editedDocument = await ref.doc(docName).update({
+      //     plus: firebase.firestore.FieldValue.arrayUnion(data),
+      //   });
+      // }
+      // if (type === "expense") {
+      //   console.log("Expense to add.");
+      //   editedDocument = await ref.doc(docName).update({
+      //     minus: firebase.firestore.FieldValue.arrayUnion(data),
+      //   });
+      // }
+      // else {
+      //   dispatchIfNotCancelled({
+      //     type: "ERROR",
+      //     payload: "No type selected. Couldn't add transaction to budget.",
+      //   });
+      // }
+      // .update({ ...data, lastEditedAt });
+
+      dispatchIfNotCancelled({
+        type: "EDITED_DOCUMENT",
+        payload: editedDocument,
       });
+    } catch (err) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
 
-  // reset form after successfully adding transaction
-  useEffect(() => {
-    if (response.success) {
-      setName("");
-      setAmount("");
-      setType("");
-      setMonth("");
-    }
-  }, [response.success]);
+  \\\\\\\\\\\\\\\\\\\\\\\\\
 
-  return (
-    <>
-      <h3>Add a Transaction</h3>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <span>Transaction Name:</span>
-          <input
-            type="text"
-            required
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-        </label>
-        <label>
-          <span>Amount ($):</span>
-          <input
-            type="number"
-            required
-            onChange={(e) => setAmount(e.target.value)}
-            value={amount}
-          />
-        </label>
-        <label className="type-label">Type:</label>
-
-        <div className="type">
-          <>
-            <input
-              name="type"
-              type="radio"
-              id="type"
-              onClick={(e) => setType(e.target.value)}
-              value={type}
-              required
-            />
-            <label htmlFor="expense">Expense</label>
-          </>
-
-          <>
-            <input
-              name="type"
-              type="radio"
-              id="type"
-              onClick={(e) => setType(e.target.value)}
-              value={type}
-              required
-            />
-            <label htmlFor="income">Income</label>
-          </>
-        </div>
-        <div className="month">
-          <label>
-            <span>Month:</span>
-            <select
-              required
-              name="month"
-              onClick={(e) => setMonth(e.target.value)}
-            >
-              <option value={month}>Pick a Month</option>
-              {monthList.map((monthItem) => {
-                return (
-                  <option key={monthItem} value={month}>
-                    {monthItem}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-        </div>
-        <button className="add-btn">Add Transaction</button>
-      </form>
-    </>
+    return (
+    <div>
+      {budgets && (
+        <ul className="transactions">
+          {budgets.map((budget) => (
+            <li key={budget.id} className={budget.month}>
+              <p>{budget.month}</p>
+              {/* <p className="name">{budget.month}</p>
+              {budget.type === "expense" && (
+                <p className="amount">- ${budget.amount}</p>
+              )}
+              {budget.type === "income" && (
+                <p className="amount">+ ${budget.amount}</p>
+              )}
+              <p>{budget.month}</p>
+              <button onClick={() => deleteDocument(budget.id)}>x</button> */}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
-}

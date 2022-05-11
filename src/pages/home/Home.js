@@ -2,7 +2,7 @@ import "./Home.css";
 import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useCollection } from "../../hooks/useCollection";
+// import { useCollection } from "../../hooks/useCollection";
 
 const monthList = [
   "January",
@@ -21,20 +21,18 @@ const monthList = [
 
 export default function Home() {
   const { user } = useAuthContext();
-  // second argument is actually three arguments
-  // to be spread out in the useCollection hook
-  // since it's an array, must use useCallback or useRef
-  const { documents, error } = useCollection(
-    "transactions",
-    ["uid", "==", user.uid],
-    ["createdAt", "desc"]
-  );
+  // const { documents, error } = useCollection("2022_budgets", [
+  //   "uid",
+  //   "==",
+  //   user.uid,
+  // ]);
 
   return (
     <div className="container">
       <div className="content">
-        {error && <p>{error}</p>}
-        {documents && <TransactionList transactions={documents} />}
+        {/* {error && <p>{error}</p>}
+        {documents && } */}
+        <TransactionList user={user} />
       </div>
 
       <div className="sidebar">

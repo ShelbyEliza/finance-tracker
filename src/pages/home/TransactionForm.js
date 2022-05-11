@@ -5,14 +5,13 @@ import { useFirestore } from "../../hooks/useFirestore";
 import "./Home.css";
 
 export default function TransactionForm({ uid, monthList }) {
+  const formRef = useRef(null);
+  const { user } = useAuthContext();
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("");
   const [month, setMonth] = useState("");
-  const formRef = useRef(null);
   const [docName, setDocName] = useState("");
-  // transaction = collection. generated if not already
-  const { user } = useAuthContext();
   // const { addDocument, response } = useFirestore("transactions");
   const { editDocument, response } = useFirestore("budget_2022_test");
   const { documents, error } = useCollection("budget_2022_test", [
@@ -23,15 +22,9 @@ export default function TransactionForm({ uid, monthList }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const transaction = {
-      uid,
-      name,
-      amount,
-      type,
-      month,
-    };
+    const transaction = [uid, name, amount, type, month];
     // addDocument(transaction);
-    editDocument(docName, type, transaction);
+    editDocument(docName, transaction);
   };
 
   useEffect(() => {

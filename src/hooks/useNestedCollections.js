@@ -1,23 +1,34 @@
 import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../firebase/config";
 
-export const useCollection = (collection, _query, _orderBy) => {
+/**
+ * @param {array} collection
+ * @param {array} _query
+ * @returns documents, error
+ */
+export const useNestedCollections = (
+  collection1,
+  doc1,
+  collection2,
+  doc2,
+  _query
+) => {
   const [documents, setDocuments] = useState(null);
   const [error, setError] = useState(null);
-
-  // useRef allows a reference type variable to be used in a useEffect hook
-  // won't see the variable as "different" each use, preventing the infinite loop
   const query = useRef(_query).current;
-  const orderBy = useRef(_orderBy).current;
+
+  console.log(collection1, doc1, collection2);
 
   useEffect(() => {
-    let ref = projectFirestore.collection(collection);
+    let ref = projectFirestore
+      .collection(collection1)
+      .doc(doc1)
+      .collection(collection2)
+      .doc(doc2);
+    console.log(ref.doc());
 
     if (query) {
       ref = ref.where(...query);
-    }
-    if (orderBy) {
-      ref = ref.orderBy(...orderBy);
     }
 
     const unsubscribe = ref.onSnapshot(
@@ -39,11 +50,7 @@ export const useCollection = (collection, _query, _orderBy) => {
 
     // unsubscribe on unmount
     return () => unsubscribe();
-  }, [collection, query, orderBy]);
-
-  // if (documents) {
-  //   console.log(documents);
-  // }
+  }, [collection1, doc1, collection2, doc2, query]);
 
   return { documents, error };
 };

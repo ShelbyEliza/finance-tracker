@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../firebase/config";
 
-export const useCollection = (collection, _query, _orderBy) => {
+export const useCollections = (collection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null);
   const [error, setError] = useState(null);
 
-  // useRef allows a reference type variable to be used in a useEffect hook
-  // won't see the variable as "different" each use, preventing the infinite loop
   const query = useRef(_query).current;
   const orderBy = useRef(_orderBy).current;
 
@@ -41,9 +39,9 @@ export const useCollection = (collection, _query, _orderBy) => {
     return () => unsubscribe();
   }, [collection, query, orderBy]);
 
-  // if (documents) {
-  //   console.log(documents);
-  // }
+  if (documents) {
+    console.log(documents);
+  }
 
   return { documents, error };
 };
