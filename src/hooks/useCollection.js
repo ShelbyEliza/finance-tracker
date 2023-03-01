@@ -19,7 +19,7 @@ export const useCollection = (coll, _query, _orderBy) => {
   const [error, setError] = useState(null);
 
   // useRef allows a reference type variable to be used in a useEffect hook
-  // won't see the variable as "different" each use, preventing the infinite loop/
+  // won't see the variable as "different" each use, preventing the infinite loop
   const q = useRef(_query).current;
   const orderedBy = useRef(_orderBy).current;
 
