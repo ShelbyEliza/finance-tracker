@@ -7,7 +7,8 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 
 function App() {
-  const { authIsReady, user } = useAuthContext();
+  const { authIsReady, isUserVerified } = useAuthContext();
+  console.log(isUserVerified);
 
   return (
     <div className="App">
@@ -18,15 +19,15 @@ function App() {
             <Route
               exact="true"
               path="/"
-              element={user ? <Home /> : <Navigate to="/login" />}
+              element={isUserVerified ? <Home /> : <Navigate to="/login" />}
             />
             <Route
               path="/login"
-              element={user ? <Navigate to="/" /> : <Login />}
+              element={isUserVerified ? <Navigate to="/" /> : <Login />}
             />
             <Route
               path="/signup"
-              element={user ? <Navigate to="/" /> : <Signup />}
+              element={isUserVerified ? <Navigate to="/" /> : <Signup />}
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

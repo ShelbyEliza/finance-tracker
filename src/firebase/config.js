@@ -1,9 +1,7 @@
-// import firebase from "firebase/app";
-// import "firebase/firestore";
-// import "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+// import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBvdFWneQ84VRlMlC3cSOCbDaizA53IoQ",
@@ -17,15 +15,18 @@ const firebaseConfig = {
 // init firebase
 initializeApp(firebaseConfig);
 
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// initializeAppCheck(app, {
+//   provider: new ReCaptchaV3Provider(firebaseConfig.siteKey),
+
+//   // Optional argument. If true, the SDK automatically refreshes App Check
+//   // tokens as needed.
+//   isTokenAutoRefreshEnabled: true,
+// });
+
 // init service
-// const projectFirestore = firebase.firestore();
-// const projectAuth = firebase.auth();
-// const projectFV = firebase.firestore;
+const db = getFirestore();
+const auth = getAuth();
 
-const projectFirestore = getFirestore();
-const projectAuth = getAuth();
-
-// // timestamp:
-// const timestamp = firebase.firestore.Timestamp;
-
-export { projectFirestore, projectAuth };
+export { db, auth };

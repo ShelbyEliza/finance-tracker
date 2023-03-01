@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from "react";
-import { projectFirestore } from "../firebase/config";
+import { db } from "../firebase/config";
 
 import { useAuthContext } from "./useAuthContext";
 // firebase imports:
@@ -71,9 +71,9 @@ export const useFirestore = (coll) => {
   const [isCancelled, setIsCancelled] = useState(false);
 
   // collection ref
-  let ref = doc(projectFirestore, "users", user.uid);
+  let ref = doc(db, "users", user.uid);
   ref = collection(ref, coll);
-  // const ref = collection(projectFirestore, coll);
+  // const ref = collection(db, coll);
 
   // only dispatch if not cancelled:
   const dispatchIfNotCancelled = (action) => {

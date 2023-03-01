@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { projectFirestore } from "../firebase/config";
+import { db } from "../firebase/config";
 
 // firebase imports:
 import {
@@ -18,9 +18,9 @@ export const useCollections = (coll, _query, _orderBy) => {
   const orderedBy = useRef(_orderBy).current;
 
   useEffect(() => {
-    // let ref = projectFirestore.collection(coll);
+    // let ref = db.collection(coll);
     // CHECK: not sure if collection is the right import
-    let ref = collection(projectFirestore, coll);
+    let ref = collection(db, coll);
 
     if (q) {
       // ref = ref.where(...q);

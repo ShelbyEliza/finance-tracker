@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { projectFirestore } from "../firebase/config";
+import { db } from "../firebase/config";
 
 import { useAuthContext } from "./useAuthContext";
 
@@ -24,9 +24,9 @@ export const useCollection = (coll, _query, _orderBy) => {
   const orderedBy = useRef(_orderBy).current;
 
   useEffect(() => {
-    // let ref = projectFirestore.collection(collection);
+    // let ref = db.collection(collection);
     // CHECK: not sure if collection is the right import
-    let ref = doc(projectFirestore, "users", user.uid);
+    let ref = doc(db, "users", user.uid);
     ref = collection(ref, coll);
 
     if (q) {
