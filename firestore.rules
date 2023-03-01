@@ -1,28 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /transactions/{document=**} {
-      allow create: if request.auth != null;
-      allow read, delete, update: if request.auth.uid == resource.data.uid;
-    }
-
-    match /budget_2022_test/{document=**} {
-      allow create: if request.auth != null;
-      allow read, delete, update: if request.auth.uid == resource.data.uid;
-    }
-
-    match /2022_budgets/{document=**} {
-      allow create: if request.auth != null;
-      allow read, delete, update: if request.auth.uid == resource.data.uid;
-    }
-
-    match /users/{userID=**} {
-      allow create: if request.auth != null;
-      allow read, delete, update: if request.auth.uid == resource.data.uid;
-      // match /months/{allDocument=**} {
-      //   allow create: if request.auth != null;
-      //   allow read, delete, update: if request.auth.uid == resource.data.uid;
-      // }
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null;
     }
   }
 }

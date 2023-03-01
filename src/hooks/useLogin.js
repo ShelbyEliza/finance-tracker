@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import { projectAuth } from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
+// firebase imports:
+// ADD VERIFICATION:
+import {
+  signInWithEmailAndPassword,
+  // sendEmailVerification,
+} from "firebase/auth";
+
 export const useLogin = (email, password) => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
@@ -14,7 +21,11 @@ export const useLogin = (email, password) => {
 
     try {
       // returns a response obj with a user property
-      const res = await projectAuth.signInWithEmailAndPassword(email, password);
+      const res = await signInWithEmailAndPassword(
+        projectAuth,
+        email,
+        password
+      );
 
       dispatch({ type: "LOGIN", payload: res.user });
 
@@ -31,10 +42,20 @@ export const useLogin = (email, password) => {
       }
     }
   };
+  // ADD VERIFICATION:
+  // const sendVerificationEmail = () => {
+  //   sendEmailVerification(projectAuth.currentUser).then(() => {
+  //     // email verification sent
+  //     // redirect to temp page until email is verified
+  //     return "Message sent! Please check your email to verify your account!";
+  //   });
+  // };
 
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
   return { login, error, isPending };
+  // ADD VERIFICATION:
+  // return { login, sendVerificationEmail, error, isPending };
 };

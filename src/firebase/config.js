@@ -1,6 +1,9 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
+// import firebase from "firebase/app";
+// import "firebase/firestore";
+// import "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBvdFWneQ84VRlMlC3cSOCbDaizA53IoQ",
@@ -12,14 +15,17 @@ const firebaseConfig = {
 };
 
 // init firebase
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 // init service
-const projectFirestore = firebase.firestore();
-const projectAuth = firebase.auth();
-const projectFV = firebase.firestore;
+// const projectFirestore = firebase.firestore();
+// const projectAuth = firebase.auth();
+// const projectFV = firebase.firestore;
 
-// timestamp:
-const timestamp = firebase.firestore.Timestamp;
+const projectFirestore = getFirestore();
+const projectAuth = getAuth();
 
-export { projectFirestore, projectAuth, timestamp, projectFV };
+// // timestamp:
+// const timestamp = firebase.firestore.Timestamp;
+
+export { projectFirestore, projectAuth };

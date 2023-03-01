@@ -1,6 +1,8 @@
 import { createContext, useEffect, useReducer } from "react";
 import { projectAuth } from "../firebase/config";
 
+import { onAuthStateChanged } from "firebase/auth";
+
 export const AuthContext = createContext();
 
 // mirrors what firebase already is doing
@@ -29,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
   // user is null if logout happens
   // initial run, firebase will either return a user or null
   useEffect(() => {
-    const unsub = projectAuth.onAuthStateChanged((user) => {
+    const unsub = onAuthStateChanged(projectAuth, (user) => {
       dispatch({ type: "AUTH_IS_READY", payload: user });
       unsub();
     });
