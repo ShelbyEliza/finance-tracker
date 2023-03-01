@@ -1,5 +1,17 @@
 import { useReducer, useEffect, useState } from "react";
-import { projectFirestore, timestamp } from "../firebase/config";
+import { db } from "../firebase/config";
+
+import { useAuthContext } from "./useAuthContext";
+// firebase imports:
+import {
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  deleteDoc,
+  updateDoc,
+  Timestamp,
+} from "firebase/firestore";
 
 // defined outside function because they only need to be built once:
 let initialState = {
@@ -53,12 +65,15 @@ const firestoreReducer = (state, action) => {
   }
 };
 
-export const useFirestore = (collection) => {
+export const useFirestore = (coll) => {
+  const { user } = useAuthContext();
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
   const [isCancelled, setIsCancelled] = useState(false);
 
   // collection ref
-  const ref = projectFirestore.collection(collection);
+  let ref = doc(db, "users", user.uid);
+  ref = collection(ref, coll);
+  // const ref = collection(db, coll);
 
   // only dispatch if not cancelled:
   const dispatchIfNotCancelled = (action) => {
@@ -72,9 +87,9 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      const createdAt = timestamp.fromDate(new Date());
+      const createdAt = Timestamp.now();
       // add function returns a document reference
-      const addedDocument = await ref.add({ ...doc, createdAt });
+      const addedDocument = await addDoc(ref, { ...doc, createdAt });
       dispatchIfNotCancelled({
         type: "ADDED_DOCUMENT",
         payload: addedDocument,
@@ -88,10 +103,12 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      const lastEditedAt = timestamp.fromDate(new Date());
-      const newSetDocument = await ref
-        .doc(docName)
-        .set({ ...doc, lastEditedAt }, { merge: true });
+      const lastEditedAt = Timestamp.now();
+      const newSetDocument = await setDoc(
+        doc(ref, docName),
+        { ...doc, lastEditedAt },
+        { merge: true }
+      );
       dispatchIfNotCancelled({
         type: "SET_DOCUMENT",
         payload: newSetDocument,
@@ -107,9 +124,9 @@ export const useFirestore = (collection) => {
 
     try {
       // const lastEditedAt = timestamp.fromDate(new Date());
-      const editedDocument = await ref
-        .doc(docName)
-        .update({ transactions: data });
+      const editedDocument = await updateDoc(doc(ref, docName), {
+        transactions: data,
+      });
 
       dispatchIfNotCancelled({
         type: "EDITED_DOCUMENT",
@@ -125,7 +142,8 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      await ref.doc(id).delete();
+      // CHECK: Not sure about DeleteDoc config
+      await deleteDoc(doc(ref, id));
       dispatchIfNotCancelled({ type: "DELETED_DOCUMENT" });
     } catch (err) {
       dispatchIfNotCancelled({ type: "ERROR", payload: "Could not delete." });

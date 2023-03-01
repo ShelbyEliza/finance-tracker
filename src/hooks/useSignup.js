@@ -1,10 +1,20 @@
-import { useState, useEffect } from "react";
-import { projectAuth } from "../firebase/config";
+import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { auth, db } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
+
+// firebase imports:
+import { doc, setDoc } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
 
 export const useSignup = () => {
-  const [isCancelled, setIsCancelled] = useState(false);
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
+  // const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const { dispatch } = useAuthContext();
 
@@ -12,40 +22,36 @@ export const useSignup = () => {
     setError(null);
     setIsPending(true);
 
-    try {
-      // signup user
-      const res = await projectAuth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      if (!res) {
-        throw new Error("Could not complete signup.");
-      }
-
-      // add display name to user
-      await res.user.updateProfile({ displayName: displayName }); // accepted ({ displayName })
-
-      // dispatch login action (locally, firebase does so automatically):
-      dispatch({ type: "LOGIN", payload: res.user });
-
-      if (!isCancelled) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        updateProfile(res.user, { displayName }).then(() => {
+          let ref = doc(db, "users", res.user.uid);
+          setDoc(ref, { displayName });
+        });
+        return res;
+      })
+      .then((res) => {
         setIsPending(false);
-        setError(null);
-      }
-    } catch (err) {
-      if (!isCancelled) {
-        console.log(err.message);
+        if (auth.currentUser !== null) {
+        }
+        dispatch({ type: "LOGIN", payload: res.user });
+      })
+      .then((res) => {
+        sendEmailVerification(auth.currentUser).then(() => {
+          // email verification sent
+          // redirect to login page until email is verified
+          navigate("/login");
+        });
+      })
+      .catch((err) => {
         setError(err.message);
-        setIsPending(false);
-      }
-    }
+      });
   };
 
   // clean up function
-  useEffect(() => {
-    return () => setIsCancelled(true);
-  }, []);
+  // useEffect(() => {
+  //   return () => setIsCancelled(true);
+  // }, []);
 
   return { error, isPending, signup };
 };

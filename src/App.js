@@ -1,45 +1,36 @@
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
-import ManageBudget from "./pages/budget/ManageBudget";
-import MonthDetails from "./pages/budget/MonthDetails";
 
 function App() {
-  const { authIsReady, user } = useAuthContext();
+  const { authIsReady, isUserVerified } = useAuthContext();
+  console.log(isUserVerified);
+
   return (
     <div className="App">
       {authIsReady && (
         <BrowserRouter>
           <Navbar />
-          <Switch>
-            <Route exact path="/">
-              {user && <Home />}
-              {!user && <Redirect to="/login" />}
-            </Route>
-            <Route path="/login">
-              {user && <Redirect to="/" />}
-              {!user && <Login />}
-            </Route>
-            <Route path="/signup">
-              {user && <Redirect to="/" />}
-              {!user && <Signup />}
-            </Route>
-            <Route path="/manage-budget">
-              {user && <ManageBudget />}
-              {!user && <Redirect to="/login" />}
-            </Route>
-            <Route path="/month-details/:month">
-              {user && <MonthDetails />}
-              {!user && <Redirect to="/login" />}
-            </Route>
-            <Route path="*">
-              <Redirect to="/" />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route
+              exact="true"
+              path="/"
+              element={isUserVerified ? <Home /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/login"
+              element={isUserVerified ? <Navigate to="/" /> : <Login />}
+            />
+            <Route
+              path="/signup"
+              element={isUserVerified ? <Navigate to="/" /> : <Signup />}
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
         </BrowserRouter>
       )}
     </div>

@@ -7,6 +7,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, isPending } = useLogin();
+  // ADD VERIFICATION:
+  // const { login, sendVerificationEmail, error, isPending } = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,5 +45,22 @@ export default function Login() {
       )}
       {error && <p>{error}</p>}
     </form>
+    // ADD VERIFICATION:
+    // {user && !user.verifiedEmail && (
+    //   <div className={styles.unverified}>
+    //     <h1>Attention</h1>
+    //     <p>Please, verify your email before enjoying site content.</p>
+    //     <p>
+    //       If you would like another verification email sent to you, click the
+    //       button below.
+    //     </p>
+    //     <button
+    //       className={styles["resend-btn"]}
+    //       onClick={sendVerificationEmail}
+    //     >
+    //       Resend Email
+    //     </button>
+    //   </div>
+    // )}
   );
 }
