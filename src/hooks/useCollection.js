@@ -81,7 +81,7 @@ export const useCollection = (coll, _query, _orderBy) => {
 
     // unsubscribe on unmount
     return () => unsubscribe();
-  }, [coll, q, orderedBy]);
+  }, [coll, user.uid, q, orderedBy]);
 
   // if (documents) {
   //   console.log(documents);
